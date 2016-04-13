@@ -4,6 +4,7 @@ package com.hamstersapp;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void showFragmentDialog(DialogFragment dialog) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        dialog.setEnterTransition(R.anim.slide_in_anim);
         dialog.show(fragmentTransaction, "dialog");
     }
 

@@ -1,4 +1,4 @@
-package com.hamstersapp.api2;
+package com.hamstersapp.api;
 
 import com.hamstersapp.model.HamsterModel;
 

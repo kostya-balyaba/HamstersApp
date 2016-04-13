@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">HamstersApp</string>
     <string name="about">О проекте</string>
+    <string name="search">Поиск</string>
+    <string name="error">При загрузке данных произошла ошибка</string>
+    <string name="connection_error">При загрузке данных произошла ошибка, проверьте подкючение к интернету.</string>
+    <string name="empty_error">По вашему запросу ничего не найдено</string>
 </resources>
