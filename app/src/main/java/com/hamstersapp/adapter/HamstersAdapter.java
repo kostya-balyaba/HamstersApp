@@ -1,6 +1,8 @@
 package com.hamstersapp.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,13 +13,14 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hamstersapp.BaseActivity;
 import com.hamstersapp.R;
 import com.hamstersapp.model.HamsterModel;
 import com.hamstersapp.utils.CircleTransform;
+import com.hamstersapp.utils.PlaceHolders;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import butterknife.Bind;
@@ -38,12 +41,12 @@ public class HamstersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     // A copy of the original mPhotoPlaces array, initialized from and then used instead as soon as
     // the mFilter PhotoPlacesFilter is used. mPhotoPlaces will then only contain the filtered values.
     private ArrayList<HamsterModel> mOriginalValues;
-
     private final Object mLock = new Object();
-
     private HamsterAdapterCallback mCallback;
-
     private HamstersFilter mFilter;
+    private int size;
+    protected Drawable mPlaceholder;
+
 
     public interface HamsterAdapterCallback {
         void showFilterEmptyResult();
@@ -56,6 +59,8 @@ public class HamstersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.mData = data;
         this.mContext = context;
         this.mCallback = callback;
+        size = (int) ((BaseActivity) context).px2dp(100);
+        mPlaceholder = PlaceHolders.round(size / 2, ContextCompat.getColor(context, android.R.color.white));
     }
 
     @Override
@@ -81,9 +86,11 @@ public class HamstersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.hamster_picture)
-        protected ImageView image;
+        protected ImageView imageView;
         @Bind(R.id.hamster_title)
-        protected TextView title;
+        protected TextView titleView;
+        @Bind(R.id.description_text_view)
+        protected TextView descriptionView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -92,13 +99,19 @@ public class HamstersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public void bind(HamsterModel model) {
             if (model != null) {
-                title.setText(!TextUtils.isEmpty(model.getTitle()) ? model.getTitle() : "");
+                titleView.setText(!TextUtils.isEmpty(model.getTitle()) ? model.getTitle() : "");
+                descriptionView.setText(!TextUtils.isEmpty(model.getDescription()) ? model.getDescription() : "");
                 if (!TextUtils.isEmpty(model.getImage()))
                     Picasso.with(mContext)
                             .load(model.getImage())
+                            .placeholder(mPlaceholder)
+                            .error(mPlaceholder)
+                            .resize(size, size)
                             .transform(new CircleTransform())
-                            .into(image);
-
+                            .centerCrop()
+                            .into(imageView);
+                else
+                    imageView.setImageDrawable(mPlaceholder);
             }
         }
     }
@@ -109,7 +122,6 @@ public class HamstersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mFilter = new HamstersFilter();
         return mFilter;
     }
-
 
     class HamstersFilter extends Filter {
 
@@ -183,6 +195,5 @@ public class HamstersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         }
     }
-
 
 }

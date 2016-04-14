@@ -5,4 +5,6 @@
     <string name="error">При загрузке данных произошла ошибка</string>
     <string name="connection_error">При загрузке данных произошла ошибка, проверьте подкючение к интернету.</string>
     <string name="empty_error">По вашему запросу ничего не найдено</string>
+    <string name="share">Поделиться</string>
+    <item name="item_click_support" type="id" />
 </resources>

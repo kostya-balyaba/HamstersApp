@@ -3,6 +3,7 @@ package com.hamstersapp;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -31,6 +33,7 @@ import com.hamstersapp.api.HamstersApiFactory;
 import com.hamstersapp.data.DataBaseReadLoader;
 import com.hamstersapp.data.DataBaseWriteLoader;
 import com.hamstersapp.model.HamsterModel;
+import com.hamstersapp.utils.WowRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +50,8 @@ import retrofit2.Callback;
 public class MainFragment extends Fragment implements Callback<List<HamsterModel>>,
         SearchView.OnQueryTextListener,
         HamstersAdapter.HamsterAdapterCallback,
-        MenuItemCompat.OnActionExpandListener {
+        MenuItemCompat.OnActionExpandListener,
+        WowRecyclerView.ItemClickSupport.OnItemClickListener {
 
     @Bind(R.id.progress_bar_container)
     protected RelativeLayout mProgressBarContainer;
@@ -114,7 +118,7 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).initToolbar(mToolbar);
+        ((BaseActivity) getActivity()).initToolbar(mToolbar, false);
         showLoading();
         loadFromDataBase();
         executeRequest();
@@ -123,8 +127,13 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
     private void fillUI() {
         if (mAdapter == null) {
             mAdapter = new HamstersAdapter(mData, getActivity(), this);
+            mAdapter.setHasStableIds(true);
             mList.setLayoutManager(new LinearLayoutManager(getActivity()));
             mList.setAdapter(mAdapter);
+            WowRecyclerView
+                    .ItemClickSupport
+                    .addTo(mList)
+                    .setOnItemClickListener(this);
             mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -170,6 +179,8 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
 
     @Override
     public void onResponse(Call<List<HamsterModel>> call, retrofit2.Response<List<HamsterModel>> response) {
+        if (!isAdded())
+            return;
         if (response != null && response.body() != null && !response.body().isEmpty()) {
             if (!mData.isEmpty())
                 mData.clear();
@@ -187,6 +198,8 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
 
     @Override
     public void onFailure(Call<List<HamsterModel>> call, Throwable t) {
+        if (!isAdded())
+            return;
         if (mData.isEmpty())
             showError(getString(R.string.connection_error));
         else
@@ -204,6 +217,8 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
 
         @Override
         public void onLoadFinished(Loader<List<HamsterModel>> loader, List<HamsterModel> data) {
+            if (!isAdded())
+                return;
             if (data != null && !data.isEmpty()) {
                 mData.clear();
                 mData.addAll(data);
@@ -225,6 +240,8 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
 
         @Override
         public void onLoadFinished(Loader loader, Object data) {
+            if (!isAdded())
+                return;
             /*Because we need sorted data */
             loadFromDataBase();
         }
@@ -234,6 +251,13 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
 
         }
     };
+
+    @Override
+    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra("model", mData.get(position));
+        startActivity(intent);
+    }
 
     @Override
     public void onDestroy() {
@@ -280,5 +304,6 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
         Log.d("asd", "onMenuItemActionCollapse");
         return true;
     }
+
 
 }

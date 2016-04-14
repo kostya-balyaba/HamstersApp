@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  * @author Kostya Balyaba
  *         on 12.04.2016.
  */
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     @Bind(R.id.logo_layout)
     protected LinearLayout mLogoLayout;
