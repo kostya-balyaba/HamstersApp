@@ -69,10 +69,6 @@ public abstract class BaseRequest {
                     .addHeader("X-Homo-Client-Version", String.format("%s %s", mContext.getResources().getString(R.string.app_name), BuildConfig.VERSION_NAME))
                     .addHeader("X-Homo-Client-Model", Build.MODEL)
                     .build();
-
-        Log.d("asd", "X-Homo-Client-OS " + Build.VERSION.RELEASE);
-        Log.d("asd", "X-Homo-Client-Version " + String.format("%s %s", mContext.getResources().getString(R.string.app_name), BuildConfig.VERSION_NAME));
-        Log.d("asd", "X-Homo-Client-Model " + Build.MODEL);
     }
 
 }

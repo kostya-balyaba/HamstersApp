@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HamstersApp</string>
+    <string name="about">О проекте</string>
 </resources>

@@ -1,9 +1,9 @@
 package com.hamstersapp.api;
 
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import com.google.gson.Gson;
+import com.hamstersapp.model.HamsterModel;
 
-import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by CisDevelopment
@@ -11,17 +11,12 @@ import java.io.IOException;
  * @author Kostya Balyaba
  *         on 12.04.2016.
  */
-public class GETHamstersResponse extends BaseResponse {
+public class GETHamstersResponse {
 
-    String result;
+    private String requestResult;
 
-    @Override
-    public void parseData(String response) {
-
-    }
-
-    public String getResult() {
-        return result;
+    public GETHamstersResponse(String requestResult) {
+        this.requestResult = requestResult;
     }
 
 }

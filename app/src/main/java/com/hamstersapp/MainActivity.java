@@ -1,27 +1,38 @@
 package com.hamstersapp;
 
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
-import com.hamstersapp.api.GETHamstersRequest;
-import com.hamstersapp.api.GETHamstersResponse;
-import com.hamstersapp.api.RequestResultCallback;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
+import butterknife.Bind;
 
 public class MainActivity extends AppCompatActivity {
-
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView = (TextView) findViewById(R.id.text);
-        new GETHamstersRequest(this, new GETHamstersResponse()).execute();
+        addFragment(R.id.container, MainFragment.newInstance());
+    }
+
+    public void initToolbar(Toolbar toolbar) {
+        setSupportActionBar(toolbar);
+    }
+
+    public void addFragment(int id, Fragment frag) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(id, frag);
+        fragmentTransaction.commit();
+    }
+
+    public void showFragmentDialog(DialogFragment dialog) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        dialog.setEnterTransition(R.anim.slide_in_anim);
+        dialog.show(fragmentTransaction, "dialog");
     }
 
 }

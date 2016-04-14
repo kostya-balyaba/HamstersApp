@@ -11,9 +11,9 @@ import java.io.IOException;
  * @author Kostya Balyaba
  *         on 12.04.2016.
  */
-public abstract class BaseResponse implements RequestResultCallback {
+public abstract class BaseResponse<T> implements RequestResultCallback {
 
-    public abstract void parseData(String response);
+    public abstract T parseData(String response);
 
     @Override
     public void onResponse(Response response) {
