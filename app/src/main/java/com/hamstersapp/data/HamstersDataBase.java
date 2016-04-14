@@ -1,8 +1,5 @@
 package com.hamstersapp.data;
 
-import android.content.Context;
-import android.util.Log;
-
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Select;
 import com.hamstersapp.model.HamsterModel;

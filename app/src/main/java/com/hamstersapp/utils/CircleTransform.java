@@ -7,11 +7,6 @@ import android.graphics.Paint;
 
 import com.squareup.picasso.Transformation;
 
-/**
- * Created by Unreal Mojo
- * 24.06.2015.
- * author Grishko Nikita
- */
 public class CircleTransform implements Transformation {
 
     @Override

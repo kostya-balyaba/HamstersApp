@@ -1,6 +1,5 @@
 package com.hamstersapp;
 
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -15,12 +14,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -44,13 +41,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 /**
- * Created by Костя on 13.04.2016.
+ * Created by CisDevelopment
+ *
+ * @author Kostya Balyaba
+ *         on 13.04.2016.
  */
 
 public class MainFragment extends Fragment implements Callback<List<HamsterModel>>,
         SearchView.OnQueryTextListener,
         HamstersAdapter.HamsterAdapterCallback,
-        MenuItemCompat.OnActionExpandListener,
         WowRecyclerView.ItemClickSupport.OnItemClickListener {
 
     @Bind(R.id.progress_bar_container)
@@ -69,7 +68,9 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
     protected TextView mErrorTitle;
     private List<HamsterModel> mData;
     private HamstersAdapter mAdapter;
-    private SearchView mSearchView;
+
+    private final int DATABASE_LOADER_ID = 0;
+    private final int NETWORK_LOADER_ID = 1;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -97,11 +98,10 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
         inflater.inflate(R.menu.menu_main, menu);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         MenuItem searchItem = menu.findItem(R.id.search);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        mSearchView.setQueryHint(getString(R.string.search));
-        mSearchView.setOnQueryTextListener(this);
-        MenuItemCompat.setOnActionExpandListener(searchItem, this);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setQueryHint(getString(R.string.search));
+        searchView.setOnQueryTextListener(this);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -109,7 +109,7 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.about: {
-                ((MainActivity) getActivity()).showFragmentDialog(new AboutDialog());
+                ((MainActivity) getActivity()).showFragmentDialog(AboutDialog.newInstance());
             }
         }
         return super.onOptionsItemSelected(item);
@@ -166,7 +166,10 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
     }
 
     private void loadFromDataBase() {
-        getLoaderManager().initLoader(0, null, mReadFromDataBaseCallback).forceLoad();
+        if (getLoaderManager().getLoader(DATABASE_LOADER_ID) == null)
+            getLoaderManager().initLoader(DATABASE_LOADER_ID, null, mReadFromDataBaseCallback).forceLoad();
+        else
+            getLoaderManager().getLoader(DATABASE_LOADER_ID).forceLoad();
     }
 
     private void executeRequest() {
@@ -174,7 +177,10 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
     }
 
     private void putInDataBase() {
-        getLoaderManager().initLoader(1, null, mPutInDataBaseCallback).forceLoad();
+        if (getLoaderManager().getLoader(NETWORK_LOADER_ID) == null)
+            getLoaderManager().initLoader(NETWORK_LOADER_ID, null, mPutInDataBaseCallback).forceLoad();
+        else
+            getLoaderManager().getLoader(NETWORK_LOADER_ID).forceLoad();
     }
 
     @Override
@@ -242,7 +248,7 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
         public void onLoadFinished(Loader loader, Object data) {
             if (!isAdded())
                 return;
-            /*Because we need sorted data */
+            /*To get sorted data */
             loadFromDataBase();
         }
 
@@ -254,16 +260,18 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
 
     @Override
     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-        Intent intent = new Intent(getActivity(), DetailsActivity.class);
-        intent.putExtra("model", mData.get(position));
-        startActivity(intent);
+        if (mData.get(position) != null) {
+            Intent intent = new Intent(getActivity(), DetailsActivity.class);
+            intent.putExtra("model", mData.get(position));
+            startActivity(intent);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getLoaderManager().destroyLoader(0);
-        getLoaderManager().destroyLoader(1);
+        getLoaderManager().destroyLoader(DATABASE_LOADER_ID);
+        getLoaderManager().destroyLoader(NETWORK_LOADER_ID);
     }
 
     private void showToast(String message) {
@@ -292,18 +300,5 @@ public class MainFragment extends Fragment implements Callback<List<HamsterModel
     public void showFilterResult() {
         showContent();
     }
-
-    @Override
-    public boolean onMenuItemActionExpand(MenuItem item) {
-        Log.d("asd", "onMenuItemActionExpand");
-        return true;
-    }
-
-    @Override
-    public boolean onMenuItemActionCollapse(MenuItem item) {
-        Log.d("asd", "onMenuItemActionCollapse");
-        return true;
-    }
-
 
 }

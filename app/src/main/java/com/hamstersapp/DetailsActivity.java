@@ -6,7 +6,9 @@ import android.text.TextUtils;
 import com.hamstersapp.model.HamsterModel;
 
 /**
- * Created by Костя on 14.04.2016.
+ * Created by CisDevelopment
+ * @author Kostya Balyaba
+ * on 14.04.2016.
  */
 
 public class DetailsActivity extends BaseActivity implements DetailsFragment.DetailsFragmentListener {

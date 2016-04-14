@@ -8,7 +8,9 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 /**
- * Created by Костя on 13.04.2016.
+ * Created by CisDevelopment
+ * @author Kostya Balyaba
+ * on 13.04.2016.
  */
 
 @Table(name = "Hamsters")
@@ -68,10 +70,6 @@ public class HamsterModel extends Model implements Parcelable {
 
     public String getImage() {
         return image;
-    }
-
-    public boolean getPinned() {
-        return Boolean.valueOf(pinned);
     }
 
     @Override

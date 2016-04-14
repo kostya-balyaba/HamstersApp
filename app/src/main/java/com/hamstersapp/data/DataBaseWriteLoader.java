@@ -1,6 +1,5 @@
 package com.hamstersapp.data;
 
-
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
@@ -14,6 +13,7 @@ import java.util.List;
  * @author Kostya Balyaba
  *         on 13.04.2016.
  */
+
 public class DataBaseWriteLoader extends AsyncTaskLoader<Void> {
 
     List<HamsterModel> mData;

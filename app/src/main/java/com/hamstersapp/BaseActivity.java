@@ -9,7 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 
 /**
- * Created by Костя on 14.04.2016.
+ * Created by CisDevelopment
+ * @author Kostya Balyaba
+ * on 14.04.2016.
  */
 
 public class BaseActivity extends AppCompatActivity {

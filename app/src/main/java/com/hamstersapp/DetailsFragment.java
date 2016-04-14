@@ -28,7 +28,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by Костя on 14.04.2016.
+ * Created by CisDevelopment
+ * @author Kostya Balyaba
+ * on 14.04.2016.
  */
 public class DetailsFragment extends Fragment {
 
@@ -121,7 +123,6 @@ public class DetailsFragment extends Fragment {
             mTitleView.setText(!TextUtils.isEmpty(mModel.getTitle()) ? mModel.getTitle() : "");
             mDescriptionView.setText(!TextUtils.isEmpty(mModel.getDescription()) ? mModel.getDescription() : "");
 
-            mHeaderViewLayout.setVisibility(View.VISIBLE);
         }
     }
 

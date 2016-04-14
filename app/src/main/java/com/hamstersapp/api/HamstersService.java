@@ -8,7 +8,9 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 /**
- * Created by Костя on 14.04.2016.
+ * Created by CisDevelopment
+ * @author Kostya Balyaba
+ * on 14.04.2016.
  */
 public interface HamstersService {
 

@@ -27,7 +27,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by Костя on 14.04.2016.
+ * Created by CisDevelopment
+ * @author Kostya Balyaba
+ * on 14.04.2016.
  */
 
 public class HamstersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
@@ -35,11 +37,11 @@ public class HamstersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context mContext;
 
-    /*Contains the list of PhotoPlaceModel that represent the data of this Adapter.*/
+    /*Contains the list of HamsterModel that represent the data of this Adapter.*/
     private List<HamsterModel> mData;
 
-    // A copy of the original mPhotoPlaces array, initialized from and then used instead as soon as
-    // the mFilter PhotoPlacesFilter is used. mPhotoPlaces will then only contain the filtered values.
+    // A copy of the original HamsterModel array, initialized from and then used instead as soon as
+    // the mFilter HamstersFilter is used. mData will then only contain the filtered values.
     private ArrayList<HamsterModel> mOriginalValues;
     private final Object mLock = new Object();
     private HamsterAdapterCallback mCallback;
@@ -60,7 +62,7 @@ public class HamstersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.mContext = context;
         this.mCallback = callback;
         size = (int) ((BaseActivity) context).px2dp(100);
-        mPlaceholder = PlaceHolders.round(size / 2, ContextCompat.getColor(context, android.R.color.white));
+        mPlaceholder = PlaceHolders.round(size, ContextCompat.getColor(context, android.R.color.white));
     }
 
     @Override
@@ -187,6 +189,7 @@ public class HamstersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (results.count > 0) {
                 if (mData.size() != 0)
                     mData.clear();
+                //noinspection unchecked
                 mData.addAll((ArrayList) results.values);
                 notifyDataSetChanged();
                 mCallback.showFilterResult();
